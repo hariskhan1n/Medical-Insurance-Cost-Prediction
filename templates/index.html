@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>InsureAI | Smart Insurance Predictor</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080b16;
+            --card: rgba(19, 25, 45, 0.78);
+            --text: #f4f5ff;
+            --muted: #929bb5;
+            --purple: #8b5cf6;
+            --cyan: #22d3ee;
+            --border: rgba(255,255,255,0.09);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: 0.22;
+            animation: float 12s ease-in-out infinite alternate;
+        }
+
+        .orb-one {
+            background: #7c3aed;
+            top: -180px;
+            left: -100px;
+        }
+
+        .orb-two {
+            background: #0891b2;
+            bottom: -180px;
+            right: -100px;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(100px, 80px);
+            }
+        }
+
+        /* Navbar */
+
+        nav {
+            width: 100%;
+            padding: 24px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--cyan);
+        }
+
+        .nav-badge {
+            color: #a5f3fc;
+            border: 1px solid rgba(34,211,238,0.25);
+            background: rgba(34,211,238,0.07);
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+
+        /* Main section */
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 75px 25px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 55px;
+            animation: appear 0.8s ease;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: #c4b5fd;
+            background: rgba(139,92,246,0.13);
+            border: 1px solid rgba(139,92,246,0.25);
+            padding: 9px 17px;
+            border-radius: 30px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(36px, 6vw, 65px);
+            line-height: 1.12;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+            background: linear-gradient(90deg, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            color: var(--muted);
+            max-width: 610px;
+            margin: auto;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* Main card */
+
+        .main-card {
+            max-width: 850px;
+            margin: auto;
+            padding: 38px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 90px rgba(0,0,0,0.3);
+            animation: appear 1s ease;
+        }
+
+        .card-heading {
+            margin-bottom: 32px;
+        }
+
+        .card-heading h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 23px;
+            margin-bottom: 9px;
+        }
+
+        .card-heading p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Form */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 13px;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            color: white;
+            background: rgba(255,255,255,0.045);
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        select option {
+            background: #151b30;
+            color: white;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        /* Button */
+
+        .predict-btn {
+            width: 100%;
+            margin-top: 32px;
+            padding: 17px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(100deg, #7c3aed, #0891b2);
+            color: white;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 8px 30px rgba(124,58,237,0.25);
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(34,211,238,0.22);
+        }
+
+        .predict-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Result */
+
+        .result {
+            display: none;
+            margin-top: 28px;
+            padding: 25px;
+            border: 1px solid rgba(34,211,238,0.25);
+            border-radius: 16px;
+            background: rgba(34,211,238,0.06);
+            animation: appear 0.5s ease;
+            text-align: center;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-label {
+            color: #a5f3fc;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .result h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 36px;
+            margin: 12px 0;
+            color: #67e8f9;
+        }
+
+        .result p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            color: #fca5a5;
+            background: rgba(239,68,68,0.1);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        /* Footer */
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #64748b;
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        footer span {
+            color: #a78bfa;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+
+        @media (max-width: 650px) {
+
+            nav {
+                padding: 20px 5%;
+            }
+
+            .container {
+                padding: 55px 16px;
+            }
+
+            .main-card {
+                padding: 24px 18px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 19px;
+            }
+
+            h1 {
+                letter-spacing: -1px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="background">
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+    </div>
+
+
+    <!-- Navbar -->
+
+    <nav>
+
+        <div class="logo">
+            Insure<span>AI.</span>
+        </div>
+
+        <div class="nav-badge">
+            ✦ ML POWERED PREDICTION
+        </div>
+
+    </nav>
+
+
+    <!-- Hero -->
+
+    <main class="container">
+
+        <section class="hero">
+
+            <div class="eyebrow">
+                INTELLIGENT INSURANCE ESTIMATION
+            </div>
+
+            <h1>
+                Understand Your<br>
+                <span>Insurance Costs.</span>
+            </h1>
+
+            <p>
+                Discover your estimated medical insurance charges
+                using our machine learning prediction system.
+                Enter your information and get an instant estimate.
+            </p>
+
+        </section>
+
+
+        <!-- Prediction Form -->
+
+        <section class="main-card">
+
+            <div class="card-heading">
+
+                <h2>Calculate Your Estimate</h2>
+
+                <p>
+                    Complete the information below to generate your prediction.
+                </p>
+
+            </div>
+
+
+            <form id="insuranceForm">
+
+                <div class="form-grid">
+
+
+                    <div class="field">
+
+                        <label for="age">Age</label>
+
+                        <input
+                            type="number"
+                            id="age"
+                            placeholder="Enter your age"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="sex">Gender</label>
+
+                        <select id="sex" required>
+
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="bmi">Body Mass Index (BMI)</label>
+
+                        <input
+                            type="number"
+                            id="bmi"
+                            placeholder="Example: 25.74"
+                            min="0.1"
+                            step="any"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="children">Number of Children</label>
+
+                        <input
+                            type="number"
+                            id="children"
+                            placeholder="Enter number of children"
+                            min="0"
+                            step="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="smoker">Smoking Status</label>
+
+                        <select id="smoker" required>
+
+                            <option value="">Select status</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="region">Region</label>
+
+                        <select id="region" required>
+
+                            <option value="">Select region</option>
+                            <option value="southeast">Southeast</option>
+                            <option value="southwest">Southwest</option>
+                            <option value="northeast">Northeast</option>
+                            <option value="northwest">Northwest</option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <button type="submit" class="predict-btn" id="predictBtn">
+                    Generate My Prediction →
+                </button>
+
+            </form>
+
+
+            <!-- Error Message -->
+
+            <div class="error" id="errorMessage"></div>
+
+
+            <!-- Prediction Result -->
+
+            <div class="result" id="resultBox">
+
+                <div class="result-label">
+                    Your Estimated Insurance Charges
+                </div>
+
+                <h2 id="predictionValue">$0.00</h2>
+
+                <p>
+                    This is a machine learning estimate, not an actual insurance quote.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        © 2026 <span>InsureAI</span>. Powered by Machine Learning.
+
+        <br><br>
+
+        Estimates are for educational purposes and should not be treated
+        as financial or medical advice.
+
+    </footer>
+
+
+
+    <!-- JavaScript: Connect Frontend to FastAPI -->
+
+    <script>
+
+        const form = document.getElementById("insuranceForm");
+
+        const button = document.getElementById("predictBtn");
+
+        const resultBox = document.getElementById("resultBox");
+
+        const predictionValue = document.getElementById("predictionValue");
+
+        const errorMessage = document.getElementById("errorMessage");
+
+
+        form.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            resultBox.classList.remove("show");
+            errorMessage.classList.remove("show");
+
+            button.disabled = true;
+            button.innerText = "Calculating your estimate...";
+
+
+            const inputData = {
+
+                age: Number(document.getElementById("age").value),
+
+                sex: document.getElementById("sex").value,
+
+                bmi: Number(document.getElementById("bmi").value),
+
+                children: Number(document.getElementById("children").value),
+
+                smoker: document.getElementById("smoker").value,
+
+                region: document.getElementById("region").value
+
+            };
+
+
+            try {
+
+                const response = await fetch("/predict", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(inputData)
+
+                });
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(data.detail || "Prediction failed.");
+
+                }
+
+
+                predictionValue.innerText =
+                    "$" + data.predicted_charges.toLocaleString(
+                        "en-US",
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    );
+
+
+                resultBox.classList.add("show");
+
+                resultBox.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest"
+                });
+
+
+            }
+
+            catch(error) {
+
+                errorMessage.innerText = error.message;
+
+                errorMessage.classList.add("show");
+
+            }
+
+            finally {
+
+                button.disabled = false;
+
+                button.innerText = "Generate My Prediction →";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
